@@ -1,0 +1,22 @@
+{
+    "title": "Charity datasette",
+    "databases": {
+        "ccew": {
+            "title": "Register of charities in England and Wales",
+            "license": "Open Government Licence v3.0",
+            "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+            "source": "Registered charities in England and Wales, Data download service provided by the Charity Commission",
+            "source_url": "https://register-of-charities.charitycommission.gov.uk/register/full-register-download",
+            "queries": {
+                "top_by_income": {
+                    "title": "Largest charities by income",
+                    "sql": "select c.regno,\nc.name, mc.income, mc.incomedate from charity c inner join main_charity mc on c.regno = mc.regno where mc.income is not null order by mc.income desc"
+                },
+                "charities_by_postcode": {
+                    "title": "Select charities in a postcode",
+                    "sql": "select c.regno,\nc.name,\nc.postcode,\nmc.income,\nmc.incomedate\nfrom charity c\ninner join main_charity mc on c.regno = mc.regno\nwhere mc.income is not null\nand c.postcode like :postcode || '%'\norder by mc.income desc"
+                }
+            }
+        }
+    }
+}
