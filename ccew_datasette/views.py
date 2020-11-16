@@ -1,56 +1,89 @@
 VIEWS = {
-    "registration_basic": """
+    "ccew_main": """
         select
             c.regno,
-            reg.regdate as date_registered,
-            rem.remdate as date_removed,
+            c.name,
+            c.orgtype,
+            c.aob,
+            c.postcode,
+            mc.coyno,
+            mc.fyend,
+            mc.welsh == 'T' as welsh,
+            mc.incomedate,
+            mc.income,
+            mc.web,
+            r.regdate as date_registered,
+            r.remdate as date_removed,
             remove_ref.text as reason_removed
         from
             charity c
-            left outer join (
-                select regno,
-                    regdate from registration
-                group by regno
-                having rowid = min(rowid)
-                order by regno, regdate
-            ) as reg on c.regno = reg.regno
-            left outer join (
-                select
-                    regno,
-                    remdate,
-                    remcode
-                from
-                    registration
-                group by
-                    regno
-                having rowid = max(rowid)
-                order by
-                    regno asc,
-                    regdate asc
-            ) as rem on c.regno = rem.regno
-            left outer join remove_ref
-                on rem.remcode = remove_ref.code
+                left outer join main_charity mc on c.regno = mc.regno
+                left outer join registration r on c.regno = r.regno
+                left outer join remove_ref
+                    on r.remcode = remove_ref.code
+        where c.orgtype == 'R'
     """,
-    "ccew_main": """
+    "ccew_removed": """
+        select
+            c.regno,
+            c.name,
+            c.orgtype,
+            c.aob,
+            c.postcode,
+            mc.coyno,
+            mc.fyend,
+            mc.welsh == 'T' as welsh,
+            mc.incomedate,
+            mc.income,
+            mc.web,
+            r.regdate as date_registered,
+            r.remdate as date_removed,
+            remove_ref.text as reason_removed
+        from
+            charity c
+                left outer join main_charity mc on c.regno = mc.regno
+                left outer join registration r on c.regno = r.regno
+                left outer join remove_ref
+                    on r.remcode = remove_ref.code
+        where c.orgtype == 'RM'
+    """,
+    "legal_form": """
+        select charity.regno,
+            name,
+            case when gd like 'CIO - Found%' then 'CIO - Foundation'
+                 when gd like 'CIO - Assoc%' then 'CIO - Association'
+                 when main_charity.coyno then 'Charitable Company'
+                 else 'Unincorporated charity' end as legal_form,
+            gd as governing_document
+        from charity left outer join main_charity on charity.regno = main_charity.regno
+        where charity.orgtype = 'R'
+    """,
+    "by_registration_year": """
 select
-  c.regno,
-  c.name,
-  c.orgtype,
-  c.aob,
-  c.postcode,
-  mc.coyno,
-  mc.fyend,
-  mc.welsh == 'T' as welsh,
-  mc.incomedate,
-  mc.income,
-  mc.web,
-  r.date_registered as date_registered,
-  r.date_removed as date_removed,
-  r.reason_removed as reason_removed
+  reg.year,
+  ifnull(charities_registered, 0),
+  ifnull(charities_removed, 0),
+  (
+    SUM(ifnull(charities_registered, 0)) OVER (ROWS UNBOUNDED PRECEDING) - SUM(ifnull(charities_removed, 0)) OVER (ROWS UNBOUNDED PRECEDING)
+  ) as charities_total
 from
-  charity c
-  left outer join main_charity mc on c.regno = mc.regno
-  left outer join registration_basic r on c.regno = r.regno
-where c.orgtype == 'R'
+  (
+    select
+      strftime('%Y', regdate) as year,
+      count(*) as charities_registered
+    from
+      registration
+    group by
+      year
+  ) as reg
+  left outer join (
+    select
+      strftime('%Y', remdate) as year,
+      count(*) as charities_removed
+    from
+      registration
+    group by
+      year
+  ) as rem on reg.year = rem.year
     """
 }

@@ -257,7 +257,7 @@ TABLES = {
             "remdate": str,  # Removal date of a charity - Blank for Registered Charities
             "remcode": str,  # (3) 	Register removal reason code
         },
-        "primary_key": ["regno", "regdate"],
+        "primary_key": ["regno"],
         "foreign_key": [
             ("regno", "charity", "regno"),
             ("remcode", "remove_ref", "code"),
@@ -273,7 +273,7 @@ TABLES = {
             "remdate": str,  # Removal date of a charity - Blank for Registered Charities
             "remcode": str,  # (3) 	Register removal reason code
         },
-        "primary_key": ["regno", "subno", "regdate"],
+        "primary_key": ["regno", "subno"],
         "foreign_key": [
             # (("regno", "subno"), "subsidiary_charity", ("regno", "subno")),
             ("remcode", "remove_ref", "code")
