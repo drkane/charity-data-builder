@@ -306,7 +306,6 @@ def clean_row(row):
 
 
 def generate_rows(reader, table_name, table_def):
-    pk_seen = set()
     column_names = list(table_def["columns"].keys())
     pk_indexes = [column_names.index(pk) for pk in table_def.get("primary_key", [])]
 
@@ -329,13 +328,16 @@ def generate_rows(reader, table_name, table_def):
 
         if pk_indexes:
             pk = tuple([row[c] for c in table_def.get("primary_key", [])])
-            # if pk in pk_seen and not "objects" in table_name:
-            #     continue
-            # pk_seen.add(pk)
 
         if "objects" in table_name:
             if last_pk and last_pk != pk:
-                yield list(last_pk) + ["".join(objects)]
+                yield {
+                    "object": "".join(objects),
+                    **{
+                        c: last_pk[i]
+                        for i, c in enumerate(table_def.get("primary_key", []))
+                    },
+                }
                 objects = []
             last_pk = pk
             seqno = str(int(row["seqno"]) + 1).zfill(4)
@@ -348,8 +350,8 @@ def generate_rows(reader, table_name, table_def):
             yield row
 
 
-def ccew_to_zip(zip_location, output_db="ccew.db"):
-    db = Database(output_db, recreate=True)
+def ccew_to_zip(zip_location, output_db="ccew.db", recreate=True):
+    db = Database(output_db, recreate=recreate)
     with ZipFile(zip_location) as z:
         for table, table_def in TABLES.items():
             f = "extract_{}.bcp".format(table.replace("subsidiary_", ""))
@@ -368,8 +370,54 @@ def ccew_to_zip(zip_location, output_db="ccew.db"):
                 db[table].insert_all(
                     generate_rows(tqdm.tqdm(bcpreader), table, table_def),
                     ignore=True,
-                    batch_size=100000
+                    batch_size=100000,
                 )
 
             if table_def.get("fts"):
                 db[table].enable_fts(table_def.get("fts"), create_triggers=True)
+
+
+basic_view = """
+select
+  c.regno,
+  c.name,
+  c.orgtype,
+  c.aob,
+  c.postcode,
+  mc.coyno,
+  mc.fyend,
+  mc.welsh == 'T' as welsh,
+  mc.incomedate,
+  mc.income,
+  mc.web,
+  reg.regdate as date_registered,
+  rem.remdate as date_removed,
+  remove_ref.text as reason_removed
+from
+  charity c
+  left outer join main_charity mc on c.regno = mc.regno
+  left outer join (
+    select regno,
+    regdate from registration
+    group by regno
+    having rowid = min(rowid)
+    order by regno, regdate
+  ) as reg on c.regno = reg.regno
+  left outer join (
+        select
+        regno,
+        remdate,
+        remcode
+    from
+        registration
+    group by
+        regno
+    having rowid = max(rowid)
+    order by
+        regno asc,
+        regdate asc
+  ) as rem on c.regno = rem.regno
+  left outer join remove_ref
+    on rem.remcode = remove_ref.code
+where c.orgtype == 'R'
+"""

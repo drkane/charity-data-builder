@@ -12,6 +12,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Turn Charity Commission data file into an SQLite DB')
     parser.add_argument('ccew', help='ZIP file with Charity Commission data')
     parser.add_argument('--ccew-out', help='Location of the output database', default="data\ccew.db")
+    parser.add_argument('--recreate', help="Recreate the database from scratch", dest='recreate', action='store_true')
+    parser.add_argument('--no-recreate', dest='recreate', action='store_false')
+    parser.set_defaults(recreate=True)
     args = parser.parse_args()
 
     if args.ccew.startswith("http"):
@@ -25,6 +28,6 @@ if __name__ == "__main__":
                 progress_bar.update(len(data))
                 tmp_zip_file.write(data)
         progress_bar.close()
-        ccew_to_zip(tmp_zip_location, args.ccew_out)
+        ccew_to_zip(tmp_zip_location, args.ccew_out, recreate=args.recreate)
     else:
-        ccew_to_zip(args.ccew, args.ccew_out)
+        ccew_to_zip(args.ccew, args.ccew_out, recreate=args.recreate)
