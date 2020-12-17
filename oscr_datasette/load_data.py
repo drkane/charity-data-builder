@@ -7,6 +7,19 @@ import tqdm
 
 from views import VIEWS
 
+NUMBER_FIELDS = (
+    "Most recent year income",
+    "Most recent year expenditure",
+    "Donations and legacies income",
+    "Charitable activities income",
+    "Other trading activities income",
+    "Investments income",
+    "Other income",
+    "Raising funds spending",
+    "Charitable activities spending",
+    "Other spending",
+)
+
 
 def clean_row(row):
     for f in ("Reason For Removal", "Ceased Date"):
@@ -25,6 +38,8 @@ def clean_row(row):
                     v = t[0]
                 else:
                     v = None
+        if k in NUMBER_FIELDS and v:
+            v = int(v)
         yield k.strip(), v
 
 

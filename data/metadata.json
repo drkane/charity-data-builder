@@ -17,6 +17,19 @@
                     "sql": "select c.regno,\nc.name,\nc.postcode,\nmc.income,\nmc.incomedate\nfrom charity c\ninner join main_charity mc on c.regno = mc.regno\nwhere mc.income is not null\nand c.postcode like :postcode || '%'\norder by mc.income desc"
                 }
             }
+        },
+        "oscr": {
+            "title": "Register of charities in Scotland",
+            "license": "Open Government Licence v3.0",
+            "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+            "source": "Charity Register Download",
+            "source_url": "https://www.oscr.org.uk/about-charities/search-the-register/charity-register-download/",
+            "queries": {
+                "top_by_income": {
+                    "title": "Largest charities by income",
+                    "sql": "select [Charity Number] as regno, [Charity Name] as name,  [Most recent year income] as income, [Year End] as incomedate from oscr where [Most recent year income] is not null order by [Most recent year income] desc"
+                }
+            }
         }
     }
 }
