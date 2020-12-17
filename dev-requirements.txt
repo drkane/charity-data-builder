@@ -12,15 +12,15 @@ atomicwrites==1.4.0       # via pytest
 attrs==20.3.0             # via pytest
 bcp-reader==0.1.1         # via -r requirements.txt
 black==20.8b1             # via -r dev-requirements.in
-certifi==2020.11.8        # via -r requirements.txt, httpx, requests
-chardet==3.0.4            # via -r requirements.txt, requests
+certifi==2020.12.5        # via -r requirements.txt, httpx, requests
+chardet==4.0.0            # via -r requirements.txt, requests
 click-default-group==1.2.2  # via -r requirements.txt, datasette, sqlite-utils
 click==7.1.2              # via -r requirements.txt, black, click-default-group, datasette, sqlite-utils, uvicorn
 colorama==0.4.4           # via pytest
-datasette==0.51.1         # via -r requirements.txt
+datasette==0.53           # via -r requirements.txt
 flake8==3.8.4             # via -r dev-requirements.in
 h11==0.11.0               # via -r requirements.txt, httpcore, uvicorn
-httpcore==0.12.1          # via -r requirements.txt, httpx
+httpcore==0.12.2          # via -r requirements.txt, httpx
 httpx==0.16.1             # via -r requirements.txt, datasette
 hupper==1.10.2            # via -r requirements.txt, datasette
 idna==2.10                # via -r requirements.txt, requests, rfc3986
@@ -32,29 +32,29 @@ markupsafe==1.1.1         # via -r requirements.txt, jinja2
 mccabe==0.6.1             # via flake8
 mergedeep==1.3.0          # via -r requirements.txt, datasette
 mypy-extensions==0.4.3    # via black
-packaging==20.4           # via -r requirements.txt, pint, pytest
+packaging==20.8           # via -r requirements.txt, pint, pytest
 pathspec==0.8.1           # via black
 pint==0.16.1              # via -r requirements.txt, datasette
 pluggy==0.13.1            # via -r requirements.txt, datasette, pytest
-py==1.9.0                 # via pytest
+py==1.10.0                # via pytest
 pycodestyle==2.6.0        # via flake8
 pyflakes==2.2.0           # via flake8
 pyparsing==2.4.7          # via -r requirements.txt, packaging
-pytest==6.1.2             # via -r dev-requirements.in
+pytest==6.2.1             # via -r dev-requirements.in
 python-baseconv==1.2.2    # via -r requirements.txt, datasette
 python-multipart==0.0.5   # via -r requirements.txt, asgi-csrf
 pyyaml==5.3.1             # via -r requirements.txt, datasette
 regex==2020.11.13         # via black
-requests==2.25.0          # via -r requirements.txt
+requests==2.25.1          # via -r requirements.txt
 rfc3986[idna2008]==1.4.0  # via -r requirements.txt, httpx
-six==1.15.0               # via -r requirements.txt, packaging, python-multipart
+six==1.15.0               # via -r requirements.txt, python-multipart
 sniffio==1.2.0            # via -r requirements.txt, httpcore, httpx
 sqlite-fts4==1.0.1        # via -r requirements.txt, sqlite-utils
-sqlite-utils==3.0         # via -r requirements.txt
+sqlite-utils==3.1         # via -r requirements.txt
 tabulate==0.8.7           # via -r requirements.txt, sqlite-utils
 toml==0.10.2              # via black, pytest
-tqdm==4.51.0              # via -r requirements.txt
+tqdm==4.54.1              # via -r requirements.txt
 typed-ast==1.4.1          # via black
 typing-extensions==3.7.4.3  # via black
 urllib3==1.26.2           # via -r requirements.txt, requests
-uvicorn==0.12.2           # via -r requirements.txt, datasette
+uvicorn==0.13.1           # via -r requirements.txt, datasette
