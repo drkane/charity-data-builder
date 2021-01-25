@@ -6,7 +6,7 @@ These databases can then be served using [datasette](https://datasette.io/).
 
 ## Install the library
 
-I recommend using a virtual environment * [pip tools](https://github.com/jazzband/pip-tools)
+I recommend using a virtual environment & [pip tools](https://github.com/jazzband/pip-tools)
 
 ```sh
 # create a virtual environment called venv
