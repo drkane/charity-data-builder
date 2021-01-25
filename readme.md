@@ -28,12 +28,12 @@ You need to get a link to the latest Charity Commission data file from <https://
 
 ```sh
 # CCEW - all charities
-python ccew_datasette https://register-of-charities.charitycommission.gov.uk/documents/34602/417919/Main+Monthly+Extract+zip+file.zip/881761e4-c0c5-aa0e-376e-a3070124041a?t=1604602947324
+python load_ccew https://register-of-charities.charitycommission.gov.uk/documents/34602/417919/Main+Monthly+Extract+zip+file.zip/881761e4-c0c5-aa0e-376e-a3070124041a?t=1604602947324
 
 # OSCR - active charities
-python oscr_datasette https://www.oscr.org.uk/umbraco/Surface/FormsSurface/CharityRegDownload
+python load_oscr https://www.oscr.org.uk/umbraco/Surface/FormsSurface/CharityRegDownload
 # OSCR - new 
-python oscr_datasette --no-recreate https://www.oscr.org.uk/umbraco/Surface/FormsSurface/CharityFormerRegDownload
+python load_oscr --no-recreate https://www.oscr.org.uk/umbraco/Surface/FormsSurface/CharityFormerRegDownload
 ```
 
 By default the databases are saved to the `data/` directory.
